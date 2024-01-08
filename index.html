@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Goedetic Calculation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width,user-scalable=no , initial-scale=1.0, maximum-scale = 1.0, maximum-scale= 1.0">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" /> 
+        <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+    </head>
+    <body>
+        <div id="audio-controls" onclick="toggleAudio()">
+            <img src="assets/img/play.png" alt="Sound Icon" width="30" height="30">
+        </div>
+        <audio id="audio" controls autoplay loop style="display:none;">
+            <source src="assets/music/Sonata.mp3" type="audio/mp3">
+        </audio>
+        <header>
+            <div class="header-description">      
+                <small>Geographic Coordinates to UTM / TM Coordinates</small>
+            </div>
+           
+    </header>
+    <nav> 
+        <div class="menu">
+            <ul>
+                <li><a href="index.html" class="active"> Home</a></li>
+                <li><a href="about.html"> About Me</a></li>
+                <li><a href="contact.html"> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main> 
+        <section class="row">
+            <article class="content">
+                <div id ="map" > </div>
+            </article>
+            <article class="content">
+                <form action="" class="full-block" onsubmit="event.preventDefault(); calculate()">
+                    <input type="text" id="fi" placeholder="Latitude" class="full-block mt-10 bg-blue border-clear">
+                    <input type="text" id="lamda" placeholder="Longitude" class="full-block mt-10 bg-blue border-clear">
+                    <select id="elpsd" onchange="setElpsd()" class="full-block mt-10 bg-blue border-clear">
+                        <option value="0" selected="">-> WGS84</option>
+                        <option value="1">-> GRS80</option>
+                        <option value="2">-> ED50</option>
+                        <option value="3">-> Bessel</option>
+                    </select>
+                    <textarea  id="result" cols="70" rows="8" placeholder="Results" class="mt-10 full-block  bg-blue border-clear  "></textarea>
+                    <button class="btn-contact mt-10" onclick="calculate()">Calculate</button>
+                    <div class="full-block mt-10"></div>
+                </form>  
+            </article>    
+        </section>
+    </main> 
+    <footer>
+        <p>SAVITAR ® 2020 - 2023</p>
+    </footer>
+        <script src="assets/js/Map.js"></script>
+        <script src="assets/js/SavitarGeoLibrary.js"></script>
+        <script>
+        function calculate(){
+            var lamdaValue = parseFloat(document.getElementById("lamda").value);
+            var elipsoidSelect = document.getElementById("elpsd");
+            var elipsoid = elipsoidSelect.options[elipsoidSelect.selectedIndex].text;
+            utmdom =  6 * (Math.floor(lamdaValue) / 6) + 3; 
+            a =  (lamdaValue + 1.5) / 3
+            tmdom = 3 * Math.floor(a); 
+            tmx = TMX(document.getElementById("lamda").value,tmdom,document.getElementById("fi").value);
+            tmy = TMY(document.getElementById("lamda").value,tmdom,document.getElementById("fi").value);
+            utmx = UTMX(document.getElementById("lamda").value,utmdom,document.getElementById("fi").value);
+            utmy = UTMY(document.getElementById("lamda").value,utmdom,document.getElementById("fi").value);
+            var resultText = "TM Coordinates: "+ "X -> " + tmx + "  Y -> " + tmy + "\n";
+            resultText += "UTM Coordinates: " +"X -> "+ utmx + "  Y-> " + utmy + "\n";
+            resultText += "Slice Middle Meridian (TM) -> " + tmdom + "\n";
+            resultText += "Slice Middle Meridian (UTM) -> " + utmdom + "\n";
+            resultText += "Ellipsoid Used -> " + elipsoid ;
+            document.getElementById("result").value = resultText; 
+        }
+        var audio = document.getElementById("audio");
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+        </script>
+    </body>
+</html>
