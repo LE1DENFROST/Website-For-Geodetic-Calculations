@@ -76,7 +76,8 @@
             resultText += "Slice Middle Meridian (TM) -> " + tmdom + "\n";
             resultText += "Slice Middle Meridian (UTM) -> " + utmdom + "\n";
             resultText += "Ellipsoid Used -> " + elipsoid ;
-            document.getElementById("result").value = resultText; 
+            document.getElementById("result").value = resultText;
+            show();
         }
         var audio = document.getElementById("audio");
         function toggleAudio() {
