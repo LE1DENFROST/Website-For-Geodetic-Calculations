@@ -36,8 +36,8 @@ map.on('click', function (e){if (marker){
 //Haritada tıklanılan yerin değerlerini kutulara yazar.
 map.addEventListener("click", e => {
 
-     document.getElementById('fi').value = e.latlng.lat.toFixed(9);
-     document.getElementById('lamda').value = e.latlng.lng.toFixed(9);
+     document.getElementById('fi').value = e.latlng.lat.toFixed(5);
+     document.getElementById('lamda').value = e.latlng.lng.toFixed(5);
                                      });
                                      
                                      
@@ -53,9 +53,10 @@ let Position = L.Control.extend({
           return latlng;
                           },
           updateHTML: function(lat, lng) {
-                        var latlng = lat + " " + lng;
-                        this._latlng.innerHTML = "Latitude: " + lat + " ----- " + "    Longitude: " + lng;
-                                         }
+                            var latlng = lat + " " + lng;
+                            this._latlng.innerHTML = "<div class='coordinate'>Latitude: " + lat + "</div>" +
+                                                     "<div class='coordinate'>Longitude: " + lng + "</div>";
+                            }
                                });
 this.position = new Position();
 this.map.addControl(this.position);
